@@ -13,6 +13,10 @@ import java.util.List;
  */
 public class SqliteJDBCDao implements MetrolinkDao {
 
+    public SqliteJDBCDao(AppOutput appOutput) {
+        this.appOutput = appOutput;
+    }
+
     public static final String JDBC_SQLITE_METROLINK_DB = "jdbc:sqlite:metrolink.db";
     public static final String ORG_SQLITE_JDBC = "org.sqlite.JDBC";
 
@@ -21,11 +25,11 @@ public class SqliteJDBCDao implements MetrolinkDao {
 
     public List<Stop> getStopsAllStops() {
         appOutput.print("Fetching metrolink stations...");
-        try (Connection connection = getConnection()) {
-            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM stops");
+        try (Connection connection = getConnection();) {
+            PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM stops;");
             ResultSet resultSet = preparedStatement.executeQuery();
             List<Stop> stops = new ArrayList<>();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
                 Stop stop = new Stop();
                 stop.setStopName(resultSet.getString("stop_name"));
                 stop.setStopDescription(resultSet.getString("stop_desc"));
@@ -43,6 +47,7 @@ public class SqliteJDBCDao implements MetrolinkDao {
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Unable to find class for loading the database", e);
         }
+
         return DriverManager.getConnection(JDBC_SQLITE_METROLINK_DB);
     }
 
