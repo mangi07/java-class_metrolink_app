@@ -6,5 +6,7 @@ import java.util.List;
  * Created by ben on 2/9/2016.
  */
 public interface MetrolinkDao {
-    List<Stop> getStopsAllStops();
+    List<String> getAllStopNames();
+
+    int getStopsCount();
 }
