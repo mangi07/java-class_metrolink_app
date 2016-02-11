@@ -9,4 +9,6 @@ public interface MetrolinkDao {
     List<String> getAllStopNames();
 
     int getStopsCount();
+
+    List<String> getArrivalTimes();
 }

@@ -21,12 +21,13 @@ public class SqliteJDBCDao implements MetrolinkDao {
     public static final String ORG_SQLITE_JDBC = "org.sqlite.JDBC";
 
     private AppOutput appOutput;
+    private List<String> stopNames = null;
 
     private static final String SELECT_ALL_METROLINK_STOP_NAMES =
             "select distinct stop_name from stops " +
                     "where stop_name like '%METROLINK STATION%' group by stop_name;";
     private static final String SELECT_METROLINK_STOP_COUNT =
-            "select count(stop_name) from stops where stop_name like '%METROLINK STATION%';";
+            "select count(stop_name) as count from stops where stop_name like '%METROLINK STATION%';";
     private static final String SELECT_ARRIVAL_TIMES_AT_METROLINK_STATION =
             "select arrival_time from stops s " +
                     "inner join stop_times st on s.stop_id = st.stop_id " +
@@ -40,18 +41,46 @@ public class SqliteJDBCDao implements MetrolinkDao {
             PreparedStatement preparedStatement =
                     connection.prepareStatement(SELECT_ALL_METROLINK_STOP_NAMES);
             ResultSet resultSet = preparedStatement.executeQuery();
-            List<String> stops = new ArrayList<>();
+            stopNames = new ArrayList<>();
             while (resultSet.next()) {
-                stops.add(resultSet.getString("stop_name"));
+                stopNames.add(resultSet.getString("stop_name"));
             }
-            return stops;
+            return stopNames;
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving stops");
         }
     }
 
     public int getStopsCount() {
-        return 36;
+        appOutput.print("Fetching metrolink stations count...");
+        int count;
+        try (Connection connection = getConnection();) {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(SELECT_METROLINK_STOP_COUNT);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            count = resultSet.getInt("count");
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving stops");
+        }
+        // should return 36;
+        return count;
+    }
+
+    public List<String> getArrivalTimes() {
+        appOutput.print("Fetching arrival times at station...");
+        List<String> arrivalTimes;
+        try (Connection connection = getConnection();) {
+            PreparedStatement preparedStatement =
+                    connection.prepareStatement(SELECT_ARRIVAL_TIMES_AT_METROLINK_STATION);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            arrivalTimes = new ArrayList<>();
+            while (resultSet.next()) {
+                arrivalTimes.add(resultSet.getString("arrival_time"));
+            }
+            return arrivalTimes;
+        } catch (SQLException e) {
+            throw new RuntimeException("Error retrieving stops");
+        }
     }
 
     private static Connection getConnection() throws SQLException {
@@ -63,6 +92,7 @@ public class SqliteJDBCDao implements MetrolinkDao {
 
         return DriverManager.getConnection(JDBC_SQLITE_METROLINK_DB);
     }
+
 
     public void setAppOutput(AppOutput appOutput) {
         this.appOutput = appOutput;

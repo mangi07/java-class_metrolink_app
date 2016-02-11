@@ -40,4 +40,9 @@ public class TestSqliteJDBCDao {
         }
     }
 
+    @Test
+    public void shouldGetArrivalTimesAtStation() {
+        dao.getArrivalTimes();
+    }
+
 }
