@@ -1,5 +1,7 @@
 package com.ben;
 
+import com.ben.util.DayOfWeek;
+
 import java.util.List;
 
 /**
@@ -10,5 +12,5 @@ public interface MetrolinkDao {
 
     int getStopsCount();
 
-    List<String> getArrivalTimes();
+    List<Integer> getArrivalTimes(String stationName, DayOfWeek day);
 }

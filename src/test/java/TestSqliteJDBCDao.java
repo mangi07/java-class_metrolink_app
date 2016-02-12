@@ -1,4 +1,5 @@
 import com.ben.dao.SqliteJDBCDao;
+import com.ben.util.DayOfWeek;
 import com.ben.util.ScreenOutput;
 import org.junit.Before;
 import org.junit.Test;
@@ -42,7 +43,7 @@ public class TestSqliteJDBCDao {
 
     @Test
     public void shouldGetArrivalTimesAtStation() {
-        dao.getArrivalTimes();
+        dao.getArrivalTimes("SHREWSBURY METROLINK STATION", DayOfWeek.SUN);
     }
 
 }

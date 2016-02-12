@@ -2,7 +2,7 @@ package com.ben.dao;
 
 import com.ben.AppOutput;
 import com.ben.MetrolinkDao;
-import com.ben.Stop;
+import com.ben.util.DayOfWeek;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -21,18 +21,19 @@ public class SqliteJDBCDao implements MetrolinkDao {
     public static final String ORG_SQLITE_JDBC = "org.sqlite.JDBC";
 
     private AppOutput appOutput;
-    private List<String> stopNames = null;
 
     private static final String SELECT_ALL_METROLINK_STOP_NAMES =
             "select distinct stop_name from stops " +
                     "where stop_name like '%METROLINK STATION%' group by stop_name;";
     private static final String SELECT_METROLINK_STOP_COUNT =
             "select count(stop_name) as count from stops where stop_name like '%METROLINK STATION%';";
+    /* USE LAST QUERY IN queries.txt WITH Date() to get the day */
     private static final String SELECT_ARRIVAL_TIMES_AT_METROLINK_STATION =
-            "select arrival_time from stops s " +
-                    "inner join stop_times st on s.stop_id = st.stop_id " +
-                    "where stop_name = \"SHREWSBURY METROLINK STATION\" " +
-                    "order by arrival_time;";
+            "select strftime('%s',arrival_time) - strftime('%s','00:00:00') as arrivals " +
+                    "from metrolink_stops " +
+                    "where stop_name = ? " +
+                    "and service_id =  ? " +
+                    "order by arrivals;";
 
 
     public List<String> getAllStopNames() {
@@ -41,7 +42,7 @@ public class SqliteJDBCDao implements MetrolinkDao {
             PreparedStatement preparedStatement =
                     connection.prepareStatement(SELECT_ALL_METROLINK_STOP_NAMES);
             ResultSet resultSet = preparedStatement.executeQuery();
-            stopNames = new ArrayList<>();
+            List<String> stopNames = new ArrayList<>();
             while (resultSet.next()) {
                 stopNames.add(resultSet.getString("stop_name"));
             }
@@ -62,24 +63,45 @@ public class SqliteJDBCDao implements MetrolinkDao {
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving stops");
         }
-        // should return 36;
+        // should return 36
         return count;
     }
 
-    public List<String> getArrivalTimes() {
+    public List<Integer> getArrivalTimes(String stationName, DayOfWeek day) {
         appOutput.print("Fetching arrival times at station...");
-        List<String> arrivalTimes;
+        List<Integer> arrivalTimes;
         try (Connection connection = getConnection();) {
             PreparedStatement preparedStatement =
                     connection.prepareStatement(SELECT_ARRIVAL_TIMES_AT_METROLINK_STATION);
+            preparedStatement.setString(1, stationName);
+            preparedStatement.setString(2, getServiceIDFromDay(day));
             ResultSet resultSet = preparedStatement.executeQuery();
-            arrivalTimes = new ArrayList<>();
+            arrivalTimes = new ArrayList<Integer>();
             while (resultSet.next()) {
-                arrivalTimes.add(resultSet.getString("arrival_time"));
+                String arrivalString = resultSet.getString("arrivals");
+                Integer arrivalInt = Integer.parseInt(arrivalString);
+                arrivalTimes.add(arrivalInt);
             }
             return arrivalTimes;
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving stops");
+        }
+    }
+
+    private String getServiceIDFromDay(DayOfWeek day) {
+        switch (day){
+            case MON:
+            case TUES:
+            case WED:
+            case THURS:
+            case FRI:
+                return "1_merged_2038871";
+            case SAT:
+                return "2_merged_2038873";
+            case SUN:
+                return "3_merged_2038872";
+            default:
+                throw new IllegalStateException("Unrecognized case: " + day);
         }
     }
 
