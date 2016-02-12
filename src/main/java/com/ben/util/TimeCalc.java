@@ -1,45 +1,55 @@
 package com.ben.util;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.ben.AppOutput;
+
+import java.time.LocalTime;
 import java.util.List;
 
 /**
- * Deals with time formatted as "hh:mm:ss", indicated as hms,
+ * Deals with time in current day expressed as seconds from midnight,
  * Created by ben on 2/11/2016.
  */
 public class TimeCalc {
 
-    public long showMinutesFromCurrentTime(String hms) {
+    public TimeCalc() {
+        output = new ScreenOutput();
+    }
 
-        String currentTime = getCurrentTime();
-        int currentSeconds = getSeconds(currentTime);
-        int futureSeconds = getSeconds(hms);
+    AppOutput output;
 
+    public int getMinutesFromCurrentTime(Integer seconds) {
 
-        return 0;
+        int nowSeconds = LocalTime.now().toSecondOfDay();
+        int secondsDiff = seconds - nowSeconds;
+        return secondsDiff / 60;
 
     }
 
-    public void findNearestTimeToCurrent(List<String> hms) {
+    /**
+     * Modifiied from http://algs4.cs.princeton.edu/11model/BinarySearch.java.html
+     *
+     * @return Tries to find now in arrivals.  If not found, returns neearest time forward.
+     * If now is greater than any of the arrivals, returns the greatest arrival time.
+     */
+    public int findNearestTime(List<Integer> arrivals, int now) {
 
+        int lo = 0;
+        int hi = arrivals.size() - 1;
+        int mid = lo + (hi - lo) / 2;
+        int arrival = arrivals.get(mid);
+        while (lo <= hi) {
+            // now is in a[lo..hi] or not present.
+            mid = lo + (hi - lo) / 2;
+            arrival = arrivals.get(mid);
+            if (now < arrival) hi = mid - 1;
+            else if (now > arrival) lo = mid + 1;
+            else return arrival;
+        }
+        return arrival;
     }
 
-    private String getCurrentTime() {
-        Date currentDate = new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm:ss");
-        return dateFormat.format(currentDate);
+    public String getCurrentTime() {
+        return java.time.LocalDateTime.now().toString();
     }
 
-    private int getSeconds(String hms) {
-        String[] timeParts = hms.split(":");
-
-        int hours = Integer.parseInt(timeParts[0]);
-        int minutes = Integer.parseInt(timeParts[1]);
-        int seconds = Integer.parseInt(timeParts[2]);
-
-        int timeInSeconds = hours * (60*60) + minutes * 60 + seconds;
-
-        return  timeInSeconds;
-    }
 }
