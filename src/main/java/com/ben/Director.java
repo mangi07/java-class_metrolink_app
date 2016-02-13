@@ -69,7 +69,11 @@ public class Director {
             output.print("You missed the last train of the day!");
         }
         int minutes = timeCalc.getMinutesFromCurrentTime(nearestArrival);
-        output.print("The next train is arriving in " + minutes + "minutes.");
+        if (minutes == 0) {
+            output.print("The next train should be arriving right now!");
+        } else {
+            output.print("The next train is arriving in " + minutes + " minutes.");
+        }
     }
 
 }

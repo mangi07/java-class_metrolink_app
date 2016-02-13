@@ -25,7 +25,7 @@ public class Metrolink {
             output.print("Invalid stop number.");
         }
 
-
+        director.showNextArrival();
 
     }
 
