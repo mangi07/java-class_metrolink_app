@@ -43,7 +43,7 @@ public class TestSqliteJDBCDao {
 
     @Test
     public void shouldGetArrivalTimesAtStation() {
-        dao.getArrivalTimes("SHREWSBURY METROLINK STATION", DayOfWeek.SUNDAY);
+        dao.getArrivalTimes("UMSL NORTH METROLINK STATION", DayOfWeek.FRIDAY);
     }
 
 }

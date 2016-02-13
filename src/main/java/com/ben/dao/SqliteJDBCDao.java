@@ -79,8 +79,10 @@ public class SqliteJDBCDao implements MetrolinkDao {
             arrivalTimes = new ArrayList<Integer>();
             while (resultSet.next()) {
                 String arrivalString = resultSet.getString("arrivals");
-                Integer arrivalInt = Integer.parseInt(arrivalString);
-                arrivalTimes.add(arrivalInt);
+                if (arrivalString != null) {
+                    Integer arrivalInt = Integer.parseInt(arrivalString);
+                    arrivalTimes.add(arrivalInt);
+                }
             }
             return arrivalTimes;
         } catch (SQLException e) {
@@ -89,7 +91,7 @@ public class SqliteJDBCDao implements MetrolinkDao {
     }
 
     private String getServiceIDFromDay(DayOfWeek day) {
-        switch (day){
+        switch (day) {
             case MONDAY:
             case TUESDAY:
             case WEDNESDAY:

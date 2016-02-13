@@ -28,8 +28,8 @@ public class Director {
 
 
     public void showStops() {
-        for (int i = 1; i < stops.size(); ++i) {
-            output.print(i + stops.get(i));
+        for (int i = 0; i < stops.size(); ++i) {
+            output.print("Stop Number " + i + ": " + stops.get(i));
         }
         output.print("Please select your stop by number listed above:");
     }
