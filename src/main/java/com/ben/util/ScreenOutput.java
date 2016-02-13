@@ -6,6 +6,17 @@ import com.ben.AppOutput;
  * Created by ben on 2/10/2016.
  */
 public class ScreenOutput implements AppOutput{
+    private static ScreenOutput screenOutput;
+
+    private ScreenOutput() {}
+
+    public static ScreenOutput getInstance() {
+        if (screenOutput == null) {
+            screenOutput = new ScreenOutput();
+        }
+        return screenOutput;
+    }
+
     public void print (String s) {
         System.out.println(s);
     }

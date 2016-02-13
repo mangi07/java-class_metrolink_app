@@ -1,11 +1,11 @@
 import com.ben.dao.SqliteJDBCDao;
-import com.ben.util.DayOfWeek;
 import com.ben.util.ScreenOutput;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.time.DayOfWeek;
 import java.util.List;
 
 /**
@@ -17,7 +17,7 @@ public class TestSqliteJDBCDao {
 
     @Before
     public void setUp () {
-        dao = new SqliteJDBCDao(new ScreenOutput());
+        dao = new SqliteJDBCDao(ScreenOutput.getInstance());
     }
 
     @Test
@@ -27,7 +27,7 @@ public class TestSqliteJDBCDao {
 
     @Test
     public void shouldSetAppOutput() {
-        dao.setAppOutput(new ScreenOutput());
+        dao.setAppOutput(ScreenOutput.getInstance());
     }
 
     @Test
@@ -43,7 +43,7 @@ public class TestSqliteJDBCDao {
 
     @Test
     public void shouldGetArrivalTimesAtStation() {
-        dao.getArrivalTimes("SHREWSBURY METROLINK STATION", DayOfWeek.SUN);
+        dao.getArrivalTimes("SHREWSBURY METROLINK STATION", DayOfWeek.SUNDAY);
     }
 
 }

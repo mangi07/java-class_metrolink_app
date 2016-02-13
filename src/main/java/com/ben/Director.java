@@ -1,12 +1,13 @@
 package com.ben;
 
 import com.ben.dao.SqliteJDBCDao;
-import com.ben.util.DayOfWeek;
 import com.ben.util.ScreenOutput;
+import com.ben.util.TimeCalc;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
+import java.time.DayOfWeek;
 
 /**
  * Created by ben on 2/11/2016.
@@ -14,8 +15,8 @@ import java.util.Scanner;
 public class Director {
 
     public Director() {
-        output = new ScreenOutput();
-        dao = new SqliteJDBCDao(new ScreenOutput());
+        output = ScreenOutput.getInstance();
+        dao = new SqliteJDBCDao(ScreenOutput.getInstance());
         stops = dao.getAllStopNames();
         stop = new Stop();
     }
@@ -24,26 +25,51 @@ public class Director {
     private MetrolinkDao dao;
     private List<String> stops;
     private Stop stop;
-    private int stationNumber;
 
 
-    public void getStation() throws IOException {
-        output.print("Please enter station number: ");
-        Scanner in = new Scanner(System.in);
-        stationNumber = in.nextInt();
-        createStop();
+    public void showStops() {
+        for (int i = 1; i < stops.size(); ++i) {
+            output.print(i + stops.get(i));
+        }
+        output.print("Please select your stop by number listed above:");
     }
 
-    private void createStop() throws IOException {
+    public int getStopNumber() throws IOException {
+        Scanner in = new Scanner(System.in);
+        return in.nextInt();
+    }
+
+    public void createStop(int stopNumber) throws IOException {
         String stationName;
         try {
-            stationName = stops.get(stationNumber);
+            stationName = stops.get(stopNumber);
         } catch (IndexOutOfBoundsException e) {
             throw new IOException("Station number given is out of range.");
         }
         stop.setStopName(stationName);
-        List<Integer> arrivals = dao.getArrivalTimes(stationName, DayOfWeek.MON);
+        List<Integer> arrivals = dao.getArrivalTimes(stationName, getDayOfWeek());
         stop.setArrivalTimes(arrivals);
+    }
+
+    private DayOfWeek getDayOfWeek() {
+        return java.time.LocalDateTime.now().getDayOfWeek();
+    }
+
+    public void showNextArrival() {
+        TimeCalc timeCalc = TimeCalc.getInstance();
+
+        String currentTime = timeCalc.getCurrentTime();
+        output.print("The current time is " + currentTime);
+
+        List<Integer> arrivals = stop.getArrivalTimes();
+
+        int now = timeCalc.getSeconds();
+        int nearestArrival = timeCalc.findNearestTime(arrivals, now);
+        if (nearestArrival == -1) {
+            output.print("You missed the last train of the day!");
+        }
+        int minutes = timeCalc.getMinutesFromCurrentTime(nearestArrival);
+        output.print("The next train is arriving in " + minutes + "minutes.");
     }
 
 }

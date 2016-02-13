@@ -2,11 +2,11 @@ package com.ben.dao;
 
 import com.ben.AppOutput;
 import com.ben.MetrolinkDao;
-import com.ben.util.DayOfWeek;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.DayOfWeek;
 
 /**
  * Created by ben on 2/9/2016.
@@ -90,15 +90,15 @@ public class SqliteJDBCDao implements MetrolinkDao {
 
     private String getServiceIDFromDay(DayOfWeek day) {
         switch (day){
-            case MON:
-            case TUES:
-            case WED:
-            case THURS:
-            case FRI:
+            case MONDAY:
+            case TUESDAY:
+            case WEDNESDAY:
+            case THURSDAY:
+            case FRIDAY:
                 return "1_merged_2038871";
-            case SAT:
+            case SATURDAY:
                 return "2_merged_2038873";
-            case SUN:
+            case SUNDAY:
                 return "3_merged_2038872";
             default:
                 throw new IllegalStateException("Unrecognized case: " + day);

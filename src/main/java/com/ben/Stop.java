@@ -17,4 +17,11 @@ public class Stop {
         this.arrivalTimes = arrivalTimes;
     }
 
+    public String getStopName() {
+        return this.stopName;
+    }
+
+    public List<Integer> getArrivalTimes() {
+        return this.arrivalTimes;
+    }
 }

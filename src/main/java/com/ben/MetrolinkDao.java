@@ -1,6 +1,6 @@
 package com.ben;
 
-import com.ben.util.DayOfWeek;
+import java.time.DayOfWeek;
 
 import java.util.List;
 

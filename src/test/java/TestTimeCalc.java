@@ -1,4 +1,5 @@
 import com.ben.util.TimeCalc;
+import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +17,7 @@ public class TestTimeCalc {
 
     @Before
     public void setUp() {
-        timeCalc = new TimeCalc();
+        timeCalc = TimeCalc.getInstance();
     }
 
     TimeCalc timeCalc;
@@ -35,7 +36,7 @@ public class TestTimeCalc {
     }
 
     @Test
-    public void shouldFindOne() {
+    public void findNearestTimeShouldReturnOne() {
         List<Integer> arrivals = new ArrayList<>(Arrays.asList(1, 2, 3, 5, 10));
         int found = timeCalc.findNearestTime(arrivals, 0);
         assertEquals(1, found);
@@ -44,23 +45,27 @@ public class TestTimeCalc {
     }
 
     @Test
-    public void shouldFindFive() {
+    public void findNearestTimeShouldReturnFive() {
         List<Integer> arrivals = new ArrayList<>(Arrays.asList(1, 2, 3, 5, 10));
         int found = timeCalc.findNearestTime(arrivals, 4);
         assertEquals(5, found);
     }
 
     @Test
-    public void shouldFindTen() {
+    public void findNearestTimeShouldReturnTen() {
         List<Integer> arrivals = new ArrayList<>(Arrays.asList(1, 2, 3, 5, 10));
         int found = timeCalc.findNearestTime(arrivals, 6);
         assertEquals(10, found);
 
         found = timeCalc.findNearestTime(arrivals, 8);
         assertEquals(10, found);
+    }
 
-        found = timeCalc.findNearestTime(arrivals, 2000);
-        assertEquals(10, found);
+    @Test
+    public void findNearestTimeShouldReturnNegativeOne() {
+        List<Integer> arrivals = new ArrayList<>(Arrays.asList(1, 2, 3, 5, 10));
+        int found = timeCalc.findNearestTime(arrivals, 11);
+        assertEquals(-1, found);
     }
 
 
