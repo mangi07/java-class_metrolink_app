@@ -1,30 +1,26 @@
 package com.ben;
 
-import com.ben.dao.SqliteJDBCDao;
-import com.ben.util.ScreenOutput;
 import com.ben.util.TimeCalc;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 import java.time.DayOfWeek;
+import java.time.LocalDateTime;
 
 /**
  * Created by ben on 2/11/2016.
  */
 public class Director {
 
-    public Director() {
-        output = ScreenOutput.getInstance();
-        dao = new SqliteJDBCDao(ScreenOutput.getInstance());
-        stops = dao.getAllStopNames();
-        stop = new Stop();
-    }
-
-    private AppOutput output;
-    private MetrolinkDao dao;
-    private List<String> stops;
-    private Stop stop;
+    ApplicationContext context =
+            new ClassPathXmlApplicationContext("application-context.xml");
+    private AppOutput output = (AppOutput)context.getBean("appOutputBean");
+    private MetrolinkDao dao = (MetrolinkDao)context.getBean("daoFactoryBean");
+    private List<String> stops = dao.getAllStopNames();
+    private Stop stop = new Stop();
 
 
     public void showStops() {
@@ -52,7 +48,7 @@ public class Director {
     }
 
     private DayOfWeek getDayOfWeek() {
-        return java.time.LocalDateTime.now().getDayOfWeek();
+        return LocalDateTime.now().getDayOfWeek();
     }
 
     public void showNextArrival() {

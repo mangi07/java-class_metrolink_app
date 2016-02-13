@@ -2,6 +2,8 @@ package com.ben;
 
 
 import com.ben.util.ScreenOutput;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
 
@@ -12,9 +14,13 @@ public class Metrolink {
 
     public static void main(String[] args) {
 
-        AppOutput output = ScreenOutput.getInstance();
+        ApplicationContext context =
+                new ClassPathXmlApplicationContext("application-context.xml");
+        AppOutput output = (AppOutput) context.getBean("appOutputBean");
 
         Director director = new Director();
+
+
         director.showStops();
 
         int stopNumber = 0;
