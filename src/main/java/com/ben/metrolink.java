@@ -16,7 +16,7 @@ public class Metrolink {
 
         ApplicationContext context =
                 new ClassPathXmlApplicationContext("application-context.xml");
-        AppOutput output = (AppOutput) context.getBean("appOutputBean");
+        AppOutput output = (AppOutput) context.getBean("output");
 
         Director director = new Director();
 

@@ -27,7 +27,6 @@ public class SqliteJDBCDao implements MetrolinkDao {
                     "where stop_name like '%METROLINK STATION%' group by stop_name;";
     private static final String SELECT_METROLINK_STOP_COUNT =
             "select count(stop_name) as count from stops where stop_name like '%METROLINK STATION%';";
-    /* USE LAST QUERY IN queries.txt WITH Date() to get the day */
     private static final String SELECT_ARRIVAL_TIMES_AT_METROLINK_STATION =
             "select strftime('%s',arrival_time) - strftime('%s','00:00:00') as arrivals " +
                     "from metrolink_stops " +

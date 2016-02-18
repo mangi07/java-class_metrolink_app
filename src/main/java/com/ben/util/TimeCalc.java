@@ -1,7 +1,5 @@
 package com.ben.util;
 
-import com.ben.AppOutput;
-
 import java.time.LocalTime;
 import java.util.List;
 
@@ -10,21 +8,6 @@ import java.util.List;
  * Created by ben on 2/11/2016.
  */
 public class TimeCalc {
-
-    private static TimeCalc timeCalc;
-
-    private TimeCalc() {
-        output = ScreenOutput.getInstance();
-    }
-    AppOutput output;
-
-    public static TimeCalc getInstance() {
-        if (timeCalc == null) {
-            timeCalc = new TimeCalc();
-        }
-        return timeCalc;
-    }
-
 
     public int getMinutesFromCurrentTime(Integer seconds) {
 

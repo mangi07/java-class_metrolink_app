@@ -3,14 +3,14 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-    <bean id="daoFactoryBean" class="com.ben.DaoFactory"
-          factory-method="createDao">
-        <constructor-arg name="daoType"
-                         value="#{T(com.ben.dao.DaoType).SQLITE_JDBC_DAO}"/>
-        <constructor-arg name="output" ref="appOutputBean"/>
+    <bean id="dao" class="com.ben.dao.SqliteJDBCDao">
+        <constructor-arg name="appOutput" ref="output"/>
     </bean>
 
-    <bean id="appOutputBean" class="com.ben.util.ScreenOutput"
-          factory-method="getInstance"/>
+    <bean id="output" class="com.ben.util.ScreenOutput"/>
+
+    <bean id="stop" class="com.ben.Stop"/>
+
+    <bean id="timeCalc" class="com.ben.util.TimeCalc"/>
 
 </beans>

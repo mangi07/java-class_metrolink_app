@@ -13,4 +13,6 @@ public interface MetrolinkDao {
     int getStopsCount();
 
     List<Integer> getArrivalTimes(String stationName, DayOfWeek day);
+
+    void setAppOutput(AppOutput appOutput);
 }

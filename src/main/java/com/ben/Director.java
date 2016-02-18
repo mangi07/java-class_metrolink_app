@@ -17,10 +17,10 @@ public class Director {
 
     ApplicationContext context =
             new ClassPathXmlApplicationContext("application-context.xml");
-    private AppOutput output = (AppOutput)context.getBean("appOutputBean");
-    private MetrolinkDao dao = (MetrolinkDao)context.getBean("daoFactoryBean");
+    private AppOutput output = (AppOutput) context.getBean("output");
+    private MetrolinkDao dao = (MetrolinkDao) context.getBean("dao");
     private List<String> stops = dao.getAllStopNames();
-    private Stop stop = new Stop();
+    private Stop stop = (Stop) context.getBean("stop");
 
 
     public void showStops() {
@@ -52,7 +52,7 @@ public class Director {
     }
 
     public void showNextArrival() {
-        TimeCalc timeCalc = TimeCalc.getInstance();
+        TimeCalc timeCalc = (TimeCalc) context.getBean("timeCalc");
 
         String currentTime = timeCalc.getCurrentTime();
         output.print("The current time is " + currentTime);

@@ -1,7 +1,8 @@
 import com.ben.util.TimeCalc;
-import junit.framework.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,12 +16,16 @@ import static junit.framework.TestCase.assertEquals;
  */
 public class TestTimeCalc {
 
-    @Before
-    public void setUp() {
-        timeCalc = TimeCalc.getInstance();
-    }
 
     TimeCalc timeCalc;
+    ApplicationContext context =
+            new ClassPathXmlApplicationContext("application-context.xml");
+
+    @Before
+    public void setUp() {
+        timeCalc = (TimeCalc) context.getBean("timeCalc");
+    }
+
 
     @Test
     public void shouldGetTimeDiffInMinutes() {

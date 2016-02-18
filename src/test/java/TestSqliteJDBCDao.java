@@ -1,7 +1,11 @@
+import com.ben.MetrolinkDao;
 import com.ben.dao.SqliteJDBCDao;
 import com.ben.util.ScreenOutput;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -13,11 +17,13 @@ import java.util.List;
  */
 public class TestSqliteJDBCDao {
 
-    SqliteJDBCDao dao = null;
+    MetrolinkDao dao;
+    ApplicationContext context =
+            new ClassPathXmlApplicationContext("application-context.xml");
 
     @Before
-    public void setUp () {
-        dao = new SqliteJDBCDao(ScreenOutput.getInstance());
+    public void setUp() {
+        dao = (MetrolinkDao) context.getBean("dao");
     }
 
     @Test
@@ -27,7 +33,7 @@ public class TestSqliteJDBCDao {
 
     @Test
     public void shouldSetAppOutput() {
-        dao.setAppOutput(ScreenOutput.getInstance());
+        dao.setAppOutput(new ScreenOutput());
     }
 
     @Test
@@ -36,8 +42,8 @@ public class TestSqliteJDBCDao {
         int stopsCount = dao.getStopsCount();
         assertEquals(stopNames.size(), stopsCount);
         for (String name : stopNames) {
-           if (!name.contains("METROLINK STATION"))
-               fail();
+            if (!name.contains("METROLINK STATION"))
+                fail();
         }
     }
 
