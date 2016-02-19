@@ -1,8 +1,8 @@
 import com.ben.MetrolinkDao;
-import com.ben.dao.SqliteJDBCDao;
 import com.ben.util.ScreenOutput;
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -17,7 +17,9 @@ import java.util.List;
  */
 public class TestSqliteJDBCDao {
 
+    @Autowired
     MetrolinkDao dao;
+
     ApplicationContext context =
             new ClassPathXmlApplicationContext("application-context.xml");
 

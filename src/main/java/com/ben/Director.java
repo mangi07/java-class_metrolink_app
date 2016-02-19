@@ -1,8 +1,11 @@
 package com.ben;
 
 import com.ben.util.TimeCalc;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
@@ -13,14 +16,21 @@ import java.time.LocalDateTime;
 /**
  * Created by ben on 2/11/2016.
  */
+
+@Component
 public class Director {
 
     ApplicationContext context =
             new ClassPathXmlApplicationContext("application-context.xml");
-    private AppOutput output = (AppOutput) context.getBean("output");
-    private MetrolinkDao dao = (MetrolinkDao) context.getBean("dao");
+
+    @Autowired
+    private AppOutput output;
+    @Autowired
+    @Qualifier("jdbc")
+    private MetrolinkDao dao;
     private List<String> stops = dao.getAllStopNames();
-    private Stop stop = (Stop) context.getBean("stop");
+    @Autowired
+    private Stop stop;
 
 
     public void showStops() {

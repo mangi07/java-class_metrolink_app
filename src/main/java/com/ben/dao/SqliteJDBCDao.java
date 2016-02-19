@@ -2,6 +2,9 @@ package com.ben.dao;
 
 import com.ben.AppOutput;
 import com.ben.MetrolinkDao;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,15 +14,15 @@ import java.time.DayOfWeek;
 /**
  * Created by ben on 2/9/2016.
  */
-public class SqliteJDBCDao implements MetrolinkDao {
 
-    public SqliteJDBCDao(AppOutput appOutput) {
-        this.appOutput = appOutput;
-    }
+@Component(value = "jdbc")
+public class SqliteJDBCDao implements MetrolinkDao {
 
     public static final String JDBC_SQLITE_METROLINK_DB = "jdbc:sqlite:metrolink.db";
     public static final String ORG_SQLITE_JDBC = "org.sqlite.JDBC";
 
+    @Autowired
+    @Qualifier("screen")
     private AppOutput appOutput;
 
     private static final String SELECT_ALL_METROLINK_STOP_NAMES =
@@ -37,7 +40,7 @@ public class SqliteJDBCDao implements MetrolinkDao {
 
     public List<String> getAllStopNames() {
         appOutput.print("Fetching metrolink stations...");
-        try (Connection connection = getConnection();) {
+        try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement =
                     connection.prepareStatement(SELECT_ALL_METROLINK_STOP_NAMES);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -69,7 +72,7 @@ public class SqliteJDBCDao implements MetrolinkDao {
     public List<Integer> getArrivalTimes(String stationName, DayOfWeek day) {
         appOutput.print("Fetching arrival times at station...");
         List<Integer> arrivalTimes;
-        try (Connection connection = getConnection();) {
+        try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement =
                     connection.prepareStatement(SELECT_ARRIVAL_TIMES_AT_METROLINK_STATION);
             preparedStatement.setString(1, stationName);

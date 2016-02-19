@@ -1,38 +1,41 @@
 package com.ben;
 
-
-import com.ben.util.ScreenOutput;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-import java.io.IOException;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by ben on 2/9/2016.
  */
+
+@Component
 public class Metrolink {
+
+    @Autowired
+    AppOutput output;
+    @Autowired
+    Director director;
+
 
     public static void main(String[] args) {
 
         ApplicationContext context =
                 new ClassPathXmlApplicationContext("application-context.xml");
-        AppOutput output = (AppOutput) context.getBean("output");
+        /*Metrolink metrolink = (Metrolink) context.getBean("metrolink");
 
-        Director director = new Director();
-
-
-        director.showStops();
+        metrolink.director.showStops();
 
         int stopNumber = 0;
         try {
-            stopNumber = director.getStopNumber();
-            director.createStop(stopNumber);
+            stopNumber = metrolink.director.getStopNumber();
+            metrolink.director.createStop(stopNumber);
         } catch (Exception e) {
-            output.print("Invalid stop number.");
+            metrolink.output.print("Invalid stop number.");
         }
 
-        director.showNextArrival();
-
+        metrolink.director.showNextArrival();
+*/
     }
 
 }

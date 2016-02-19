@@ -1,10 +1,14 @@
 package com.ben;
 
+import org.springframework.stereotype.Component;
+
 import java.util.List;
 
 /**
  * Created by ben on 2/9/2016.
  */
+
+@Component
 public class Stop {
     private String stopName;
     private List<Integer> arrivalTimes; // in seconds from midnight
