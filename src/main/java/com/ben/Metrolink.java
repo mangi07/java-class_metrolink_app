@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  */
 
 @Component
-public class Metrolink {
+public class Metrolink{
 
     @Autowired
     AppOutput output;
