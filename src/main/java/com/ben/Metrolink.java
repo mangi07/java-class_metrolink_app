@@ -10,7 +10,7 @@ import java.io.IOException;
 /**
  * Created by ben on 2/9/2016.
  */
-public class Metrolink {
+public class Metrolink{
 
     public static void main(String[] args) {
 
