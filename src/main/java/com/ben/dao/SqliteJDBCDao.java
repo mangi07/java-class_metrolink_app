@@ -18,12 +18,15 @@ import java.time.DayOfWeek;
 @Component(value = "jdbc")
 public class SqliteJDBCDao implements MetrolinkDao {
 
+
     public static final String JDBC_SQLITE_METROLINK_DB = "jdbc:sqlite:metrolink.db";
     public static final String ORG_SQLITE_JDBC = "org.sqlite.JDBC";
+
 
     @Autowired
     @Qualifier("screen")
     private AppOutput appOutput;
+
 
     private static final String SELECT_ALL_METROLINK_STOP_NAMES =
             "select distinct stop_name from stops " +
@@ -36,6 +39,7 @@ public class SqliteJDBCDao implements MetrolinkDao {
                     "where stop_name = ? " +
                     "and service_id =  ? " +
                     "order by arrivals;";
+
 
 
     public List<String> getAllStopNames() {
@@ -52,6 +56,7 @@ public class SqliteJDBCDao implements MetrolinkDao {
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving stops");
         }
+
     }
 
     public int getStopsCount() {
@@ -67,6 +72,7 @@ public class SqliteJDBCDao implements MetrolinkDao {
         }
         // should return 36
         return count;
+
     }
 
     public List<Integer> getArrivalTimes(String stationName, DayOfWeek day) {
@@ -90,6 +96,7 @@ public class SqliteJDBCDao implements MetrolinkDao {
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving stops");
         }
+
     }
 
     private String getServiceIDFromDay(DayOfWeek day) {

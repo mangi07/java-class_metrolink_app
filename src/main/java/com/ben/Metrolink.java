@@ -22,7 +22,7 @@ public class Metrolink {
 
         ApplicationContext context =
                 new ClassPathXmlApplicationContext("application-context.xml");
-        /*Metrolink metrolink = (Metrolink) context.getBean("metrolink");
+        Metrolink metrolink = (Metrolink) context.getBean("metrolink");
 
         metrolink.director.showStops();
 
@@ -35,7 +35,7 @@ public class Metrolink {
         }
 
         metrolink.director.showNextArrival();
-*/
+
     }
 
 }

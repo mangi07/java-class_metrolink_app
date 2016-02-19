@@ -1,10 +1,11 @@
 package com.ben;
 
 import com.ben.util.TimeCalc;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -18,22 +19,33 @@ import java.time.LocalDateTime;
  */
 
 @Component
-public class Director {
+public class Director implements ApplicationContextAware {
 
-    ApplicationContext context =
-            new ClassPathXmlApplicationContext("application-context.xml");
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.context = applicationContext;
+    }
+
+    private ApplicationContext context;
 
     @Autowired
     private AppOutput output;
     @Autowired
     @Qualifier("jdbc")
     private MetrolinkDao dao;
-    private List<String> stops = dao.getAllStopNames();
+    private List<String> stops;
     @Autowired
     private Stop stop;
 
 
+    private void initStops() {
+        if (stops == null){
+            stops = dao.getAllStopNames();
+        }
+    }
+
     public void showStops() {
+        initStops();
         for (int i = 0; i < stops.size(); ++i) {
             output.print("Stop Number " + i + ": " + stops.get(i));
         }
@@ -46,6 +58,7 @@ public class Director {
     }
 
     public void createStop(int stopNumber) throws IOException {
+        initStops();
         String stationName;
         try {
             stationName = stops.get(stopNumber);
@@ -81,5 +94,6 @@ public class Director {
             output.print("The next train is arriving in " + minutes + " minutes.");
         }
     }
+
 
 }

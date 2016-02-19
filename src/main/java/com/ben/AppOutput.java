@@ -5,5 +5,5 @@ package com.ben;
  */
 
 public interface AppOutput {
-    public void print (String s);
+    void print (String s);
 }

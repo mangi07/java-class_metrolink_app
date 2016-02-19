@@ -1,5 +1,7 @@
 package com.ben.util;
 
+import org.springframework.stereotype.Component;
+
 import java.time.LocalTime;
 import java.util.List;
 
@@ -7,6 +9,7 @@ import java.util.List;
  * Deals with time in current day expressed as seconds from midnight,
  * Created by ben on 2/11/2016.
  */
+@Component
 public class TimeCalc {
 
     public int getMinutesFromCurrentTime(Integer seconds) {
