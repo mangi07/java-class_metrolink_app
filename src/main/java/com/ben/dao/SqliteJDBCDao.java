@@ -2,12 +2,11 @@ package com.ben.dao;
 
 import com.ben.AppOutput;
 import com.ben.MetrolinkDao;
-import com.ben.Stop;
+import com.ben.models.StopNames;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -22,7 +21,7 @@ import org.hibernate.SessionFactory;
  */
 
 //@Component(value = "jdbc")
-    @Repository(value = "jdbc")
+@Repository(value = "jdbc")
 public class SqliteJDBCDao implements MetrolinkDao {
 
 
@@ -48,7 +47,6 @@ public class SqliteJDBCDao implements MetrolinkDao {
                     "where stop_name = ? " +
                     "and service_id =  ? " +
                     "order by arrivals;";*/
-
 
 
     public List<String> getAllStopNames() {
@@ -78,7 +76,8 @@ public class SqliteJDBCDao implements MetrolinkDao {
 
     public int getStopsCount() {
         appOutput.print("Fetching metrolink stations count...");
-        int count;
+
+        /*int count;
         try (Connection connection = getConnection();) {
             PreparedStatement preparedStatement =
                     connection.prepareStatement(SELECT_METROLINK_STOP_COUNT);
@@ -88,13 +87,15 @@ public class SqliteJDBCDao implements MetrolinkDao {
             throw new RuntimeException("Error retrieving stops");
         }
         // should return 36
-        return count;
+        return count;*/
+        return 0;
 
     }
 
     public List<Integer> getArrivalTimes(String stationName, DayOfWeek day) {
         appOutput.print("Fetching arrival times at station...");
-        List<Integer> arrivalTimes;
+
+        /*List<Integer> arrivalTimes;
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement =
                     connection.prepareStatement(SELECT_ARRIVAL_TIMES_AT_METROLINK_STATION);
@@ -113,7 +114,8 @@ public class SqliteJDBCDao implements MetrolinkDao {
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving stops");
         }
-
+*/
+        return new ArrayList<>(0);
     }
 
     private String getServiceIDFromDay(DayOfWeek day) {

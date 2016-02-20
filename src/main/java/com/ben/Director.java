@@ -1,5 +1,6 @@
 package com.ben;
 
+import com.ben.models.Stop;
 import com.ben.util.TimeCalc;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;

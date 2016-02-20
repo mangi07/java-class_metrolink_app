@@ -1,4 +1,4 @@
-package com.ben.dao;
+package com.ben.models;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.ben;
+package com.ben.models;
 
 import org.springframework.stereotype.Component;
 
