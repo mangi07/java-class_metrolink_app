@@ -1,6 +1,7 @@
 package com.ben;
 
 import com.ben.models.Stop;
+import com.ben.models.StopNames;
 import com.ben.util.TimeCalc;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class Director implements ApplicationContextAware {
     @Autowired
     @Qualifier("jdbc")
     private MetrolinkDao dao;
-    private List<String> stops;
+    private List<StopNames> stops;
     @Autowired
     private Stop stop;
 
@@ -48,7 +49,7 @@ public class Director implements ApplicationContextAware {
     public void showStops() {
         initStops();
         for (int i = 0; i < stops.size(); ++i) {
-            output.print("Stop Number " + i + ": " + stops.get(i));
+            output.print("Stop Number " + i + ": " + stops.get(i).getStopName());
         }
         output.print("Please select your stop by number listed above:");
     }
@@ -62,7 +63,7 @@ public class Director implements ApplicationContextAware {
         initStops();
         String stationName;
         try {
-            stationName = stops.get(stopNumber);
+            stationName = stops.get(stopNumber).getStopName();
         } catch (IndexOutOfBoundsException e) {
             throw new IOException("Station number given is out of range.");
         }

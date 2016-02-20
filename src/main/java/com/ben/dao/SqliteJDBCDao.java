@@ -25,8 +25,8 @@ import org.hibernate.SessionFactory;
 public class SqliteJDBCDao implements MetrolinkDao {
 
 
-    public static final String JDBC_SQLITE_METROLINK_DB = "jdbc:sqlite:metrolink.db";
-    public static final String ORG_SQLITE_JDBC = "org.sqlite.JDBC";
+    //public static final String JDBC_SQLITE_METROLINK_DB = "jdbc:sqlite:metrolink.db";
+    //public static final String ORG_SQLITE_JDBC = "org.sqlite.JDBC";
 
 
     @Autowired
@@ -49,10 +49,10 @@ public class SqliteJDBCDao implements MetrolinkDao {
                     "order by arrivals;";*/
 
 
-    public List<String> getAllStopNames() {
+    public List<StopNames> getAllStopNames() {
         sessionFactoryBean.getCurrentSession().beginTransaction();
         Criteria criteria = sessionFactoryBean.getCurrentSession().createCriteria(StopNames.class);
-        criteria.add(Restrictions.like("stops", "METROLINK STATION"));
+        criteria.add(Restrictions.like("stopName", "%METROLINK STATION%"));
         List list = criteria.list();
         sessionFactoryBean.getCurrentSession().getTransaction().commit();
         return list;
@@ -135,6 +135,7 @@ public class SqliteJDBCDao implements MetrolinkDao {
         }
     }
 
+/*
     private static Connection getConnection() throws SQLException {
         try {
             Class.forName(ORG_SQLITE_JDBC);
@@ -144,6 +145,7 @@ public class SqliteJDBCDao implements MetrolinkDao {
 
         return DriverManager.getConnection(JDBC_SQLITE_METROLINK_DB);
     }
+*/
 
 
     public void setAppOutput(AppOutput appOutput) {

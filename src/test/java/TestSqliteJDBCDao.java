@@ -1,4 +1,5 @@
 import com.ben.MetrolinkDao;
+import com.ben.models.StopNames;
 import com.ben.util.ScreenOutput;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,11 +41,11 @@ public class TestSqliteJDBCDao {
 
     @Test
     public void shouldGetAllStopNames() {
-        List<String> stopNames = dao.getAllStopNames();
+        List<StopNames> stops = dao.getAllStopNames();
         int stopsCount = dao.getStopsCount();
-        assertEquals(stopNames.size(), stopsCount);
-        for (String name : stopNames) {
-            if (!name.contains("METROLINK STATION"))
+        assertEquals(stops.size(), stopsCount);
+        for (StopNames stop : stops) {
+            if (!stop.getStopName().contains("METROLINK STATION"))
                 fail();
         }
     }

@@ -30,6 +30,10 @@ public class TimeCalc {
      */
     public int findNearestTime(List<Integer> arrivals, int now) {
 
+        if(arrivals.size() < 1){
+            throw new IllegalArgumentException("arrivals list is empty");
+        }
+
         int lo = 0;
         int hi = arrivals.size() - 1;
         int mid = lo + (hi - lo) / 2;
