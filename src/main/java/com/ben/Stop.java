@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by ben on 2/9/2016.
  */
-
+// MODIFY WITH HIBERNATE ANNOTATIONS
 @Component
 public class Stop {
     private String stopName;

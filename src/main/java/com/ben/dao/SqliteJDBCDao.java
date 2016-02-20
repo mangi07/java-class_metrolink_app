@@ -2,20 +2,27 @@ package com.ben.dao;
 
 import com.ben.AppOutput;
 import com.ben.MetrolinkDao;
+import com.ben.Stop;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.time.DayOfWeek;
 
+import org.hibernate.SessionFactory;
+
 /**
  * Created by ben on 2/9/2016.
  */
 
-@Component(value = "jdbc")
+//@Component(value = "jdbc")
+    @Repository(value = "jdbc")
 public class SqliteJDBCDao implements MetrolinkDao {
 
 
@@ -26,9 +33,11 @@ public class SqliteJDBCDao implements MetrolinkDao {
     @Autowired
     @Qualifier("screen")
     private AppOutput appOutput;
+    @Autowired
+    private SessionFactory sessionFactoryBean;
 
 
-    private static final String SELECT_ALL_METROLINK_STOP_NAMES =
+    /*private static final String SELECT_ALL_METROLINK_STOP_NAMES =
             "select distinct stop_name from stops " +
                     "where stop_name like '%METROLINK STATION%' group by stop_name;";
     private static final String SELECT_METROLINK_STOP_COUNT =
@@ -38,12 +47,20 @@ public class SqliteJDBCDao implements MetrolinkDao {
                     "from metrolink_stops " +
                     "where stop_name = ? " +
                     "and service_id =  ? " +
-                    "order by arrivals;";
+                    "order by arrivals;";*/
 
 
 
     public List<String> getAllStopNames() {
-        appOutput.print("Fetching metrolink stations...");
+        sessionFactoryBean.getCurrentSession().beginTransaction();
+        Criteria criteria = sessionFactoryBean.getCurrentSession().createCriteria(StopNames.class);
+        criteria.add(Restrictions.like("stops", "METROLINK STATION"));
+        List list = criteria.list();
+        sessionFactoryBean.getCurrentSession().getTransaction().commit();
+        return list;
+
+
+        /*appOutput.print("Fetching metrolink stations...");
         try (Connection connection = getConnection()) {
             PreparedStatement preparedStatement =
                     connection.prepareStatement(SELECT_ALL_METROLINK_STOP_NAMES);
@@ -56,7 +73,7 @@ public class SqliteJDBCDao implements MetrolinkDao {
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving stops");
         }
-
+*/
     }
 
     public int getStopsCount() {
