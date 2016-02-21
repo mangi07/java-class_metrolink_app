@@ -29,12 +29,10 @@ public class Metrolink {
         int stopNumber = 0;
         try {
             stopNumber = metrolink.director.getStopNumber();
-            metrolink.director.createStop(stopNumber);
+            metrolink.director.showNextArrival(stopNumber);
         } catch (Exception e) {
             metrolink.output.print("Invalid stop number.");
         }
-
-        metrolink.director.showNextArrival();
 
     }
 

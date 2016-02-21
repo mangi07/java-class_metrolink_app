@@ -1,7 +1,8 @@
 package com.ben;
 
-import com.ben.models.Stop;
-import com.ben.models.StopNames;
+import com.ben.models.StopArrival;
+import com.ben.models.StopName;
+import com.ben.util.TimeAdapter;
 import com.ben.util.TimeCalc;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,13 +36,10 @@ public class Director implements ApplicationContextAware {
     @Autowired
     @Qualifier("jdbc")
     private MetrolinkDao dao;
-    private List<StopNames> stops;
-    @Autowired
-    private Stop stop;
-
+    private List<StopName> stops;
 
     private void initStops() {
-        if (stops == null){
+        if (stops == null) {
             stops = dao.getAllStopNames();
         }
     }
@@ -59,33 +57,37 @@ public class Director implements ApplicationContextAware {
         return in.nextInt();
     }
 
-    public void createStop(int stopNumber) throws IOException {
+    private DayOfWeek getDayOfWeek() {
+        return LocalDateTime.now().getDayOfWeek();
+    }
+
+    public void showNextArrival(int stopNumber) throws IOException {
         initStops();
+        TimeCalc timeCalc = (TimeCalc) context.getBean("timeCalc");
+
+        String currentTime = timeCalc.getCurrentTime();
+        output.print("The current time is " + currentTime);
+
         String stationName;
         try {
             stationName = stops.get(stopNumber).getStopName();
         } catch (IndexOutOfBoundsException e) {
             throw new IOException("Station number given is out of range.");
         }
-        stop.setStopName(stationName);
-        List<Integer> arrivals = dao.getArrivalTimes(stationName, getDayOfWeek());
-        stop.setArrivalTimes(arrivals);
-    }
-
-    private DayOfWeek getDayOfWeek() {
-        return LocalDateTime.now().getDayOfWeek();
-    }
-
-    public void showNextArrival() {
-        TimeCalc timeCalc = (TimeCalc) context.getBean("timeCalc");
-
-        String currentTime = timeCalc.getCurrentTime();
-        output.print("The current time is " + currentTime);
-
-        List<Integer> arrivals = stop.getArrivalTimes();
+        List<StopArrival> arrivals = dao.getArrivalTimes(stationName, getDayOfWeek());
 
         int now = timeCalc.getSeconds();
-        int nearestArrival = timeCalc.findNearestTime(arrivals, now);
+
+        List<Integer> arrivalSeconds = null;
+        for (StopArrival arrivalTime : arrivals) {
+            Integer seconds = TimeAdapter.stringTimeToSeconds(
+                    arrivalTime.getArrivalTime());
+            arrivalSeconds.add(seconds);
+        }
+        if(arrivalSeconds == null){
+            throw new IllegalStateException("arrivalSeconds was not filled.");
+        }
+        int nearestArrival = timeCalc.findNearestTime(arrivalSeconds, now);
         if (nearestArrival == -1) {
             output.print("You missed the last train of the day!");
         }

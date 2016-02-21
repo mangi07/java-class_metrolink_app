@@ -1,11 +1,15 @@
 import com.ben.MetrolinkDao;
-import com.ben.models.StopNames;
+import com.ben.models.StopName;
 import com.ben.util.ScreenOutput;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -16,17 +20,18 @@ import java.util.List;
 /**
  * Created by ben on 2/10/2016.
  */
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(locations = {"/application-context.xml"})
 public class TestSqliteJDBCDao {
 
+    private ApplicationContext context;
     @Autowired
+    @Qualifier("jdbc")
     MetrolinkDao dao;
-
-    ApplicationContext context =
-            new ClassPathXmlApplicationContext("application-context.xml");
 
     @Before
     public void setUp() {
-        dao = (MetrolinkDao) context.getBean("dao");
+        context = new ClassPathXmlApplicationContext("application-context.xml");
     }
 
     @Test
@@ -41,10 +46,10 @@ public class TestSqliteJDBCDao {
 
     @Test
     public void shouldGetAllStopNames() {
-        List<StopNames> stops = dao.getAllStopNames();
+        List<StopName> stops = dao.getAllStopNames();
         int stopsCount = dao.getStopsCount();
         assertEquals(stops.size(), stopsCount);
-        for (StopNames stop : stops) {
+        for (StopName stop : stops) {
             if (!stop.getStopName().contains("METROLINK STATION"))
                 fail();
         }
@@ -54,5 +59,6 @@ public class TestSqliteJDBCDao {
     public void shouldGetArrivalTimesAtStation() {
         dao.getArrivalTimes("UMSL NORTH METROLINK STATION", DayOfWeek.FRIDAY);
     }
+
 
 }

@@ -24,8 +24,8 @@
 
         <property name="annotatedClasses">
             <list>
-                <value>com.ben.models.Stop</value>
-                <value>com.ben.models.StopNames</value>
+                <value>com.ben.models.StopArrival</value>
+                <value>com.ben.models.StopName</value>
             </list>
         </property>
 
