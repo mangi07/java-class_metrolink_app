@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import java.time.DayOfWeek;
@@ -53,9 +54,15 @@ public class Director implements ApplicationContextAware {
         output.print("Please select your stop by number listed above:");
     }
 
-    public int getStopNumber() throws IOException {
-        Scanner in = new Scanner(System.in);
-        return in.nextInt();
+    public int getStopNumber() throws IOException, InputMismatchException {
+        while(true) {
+            try {
+                Scanner in = new Scanner(System.in);
+                return in.nextInt();
+            } catch (Exception e) {
+                output.print("Invalid stop number given.  Please re-enter stop number:");
+            }
+        }
     }
 
     private DayOfWeek getDayOfWeek() {

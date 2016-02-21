@@ -54,7 +54,7 @@ public class SqliteJDBCDao implements MetrolinkDao {
     }
 
     public List<StopArrival> getArrivalTimes(String stationName, DayOfWeek day) {
-        appOutput.print("Fetching arrival times at station...");
+        appOutput.print("Fetching arrival times at station " + stationName + "...");
 
         sessionFactoryBean.getCurrentSession().beginTransaction();
         Criteria criteria = sessionFactoryBean.getCurrentSession().createCriteria(StopArrival.class);
