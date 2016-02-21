@@ -5,6 +5,8 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.io.IOException;
+
 /**
  * Created by ben on 2/9/2016.
  */
@@ -30,8 +32,8 @@ public class Metrolink {
         try {
             stopNumber = metrolink.director.getStopNumber();
             metrolink.director.showNextArrival(stopNumber);
-        } catch (Exception e) {
-            metrolink.output.print("Invalid stop number.");
+        } catch (IOException e) {
+            metrolink.output.print("Exception: " + e);
         }
 
     }

@@ -12,6 +12,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.time.DayOfWeek;
@@ -73,12 +74,13 @@ public class Director implements ApplicationContextAware {
         int nearestArrival = timeCalc.findNearestTime(arrivalSeconds, now);
         if (nearestArrival == -1) {
             output.print("You missed the last train of the day!");
-        }
-        int minutes = timeCalc.getMinutesFromCurrentTime(nearestArrival);
-        if (minutes == 0) {
-            output.print("The next train should be arriving right now!");
         } else {
-            output.print("The next train is arriving in " + minutes + " minutes.");
+            int minutes = timeCalc.getMinutesFromCurrentTime(nearestArrival);
+            if (minutes == 0) {
+                output.print("The next train should be arriving right now!");
+            } else {
+                output.print("The next train is arriving in " + minutes + " minutes.");
+            }
         }
     }
 
@@ -91,13 +93,13 @@ public class Director implements ApplicationContextAware {
         }
         List<StopArrival> arrivals = dao.getArrivalTimes(stationName, getDayOfWeek());
 
-        List<Integer> arrivalSeconds = null;
+        List<Integer> arrivalSeconds = new ArrayList<>();
         for (StopArrival arrivalTime : arrivals) {
             Integer seconds = TimeAdapter.stringTimeToSeconds(
                     arrivalTime.getArrivalTime());
             arrivalSeconds.add(seconds);
         }
-        if(arrivalSeconds == null){
+        if (arrivalSeconds.size() < 1) {
             throw new IllegalStateException("arrivalSeconds was not filled.");
         }
         return arrivalSeconds;

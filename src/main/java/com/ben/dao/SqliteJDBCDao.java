@@ -5,6 +5,7 @@ import com.ben.MetrolinkDao;
 import com.ben.models.StopArrival;
 import com.ben.models.StopName;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +60,7 @@ public class SqliteJDBCDao implements MetrolinkDao {
         Criteria criteria = sessionFactoryBean.getCurrentSession().createCriteria(StopArrival.class);
         criteria.add(Restrictions.eq("stopName", stationName));
         criteria.add(Restrictions.eq("serviceId", getServiceIDFromDay(day)));
+        criteria.addOrder(Order.asc("arrivalTime"));
         List list = criteria.list();
         sessionFactoryBean.getCurrentSession().getTransaction().commit();
         return list;
