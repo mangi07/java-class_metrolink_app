@@ -68,25 +68,8 @@ public class Director implements ApplicationContextAware {
         String currentTime = timeCalc.getCurrentTime();
         output.print("The current time is " + currentTime);
 
-        String stationName;
-        try {
-            stationName = stops.get(stopNumber).getStopName();
-        } catch (IndexOutOfBoundsException e) {
-            throw new IOException("Station number given is out of range.");
-        }
-        List<StopArrival> arrivals = dao.getArrivalTimes(stationName, getDayOfWeek());
-
+        List<Integer> arrivalSeconds = getArrivalSeconds(stopNumber);
         int now = timeCalc.getSeconds();
-
-        List<Integer> arrivalSeconds = null;
-        for (StopArrival arrivalTime : arrivals) {
-            Integer seconds = TimeAdapter.stringTimeToSeconds(
-                    arrivalTime.getArrivalTime());
-            arrivalSeconds.add(seconds);
-        }
-        if(arrivalSeconds == null){
-            throw new IllegalStateException("arrivalSeconds was not filled.");
-        }
         int nearestArrival = timeCalc.findNearestTime(arrivalSeconds, now);
         if (nearestArrival == -1) {
             output.print("You missed the last train of the day!");
@@ -97,6 +80,27 @@ public class Director implements ApplicationContextAware {
         } else {
             output.print("The next train is arriving in " + minutes + " minutes.");
         }
+    }
+
+    private List<Integer> getArrivalSeconds(int stopNumber) throws IOException {
+        String stationName;
+        try {
+            stationName = stops.get(stopNumber).getStopName();
+        } catch (IndexOutOfBoundsException e) {
+            throw new IOException("Station number given is out of range.");
+        }
+        List<StopArrival> arrivals = dao.getArrivalTimes(stationName, getDayOfWeek());
+
+        List<Integer> arrivalSeconds = null;
+        for (StopArrival arrivalTime : arrivals) {
+            Integer seconds = TimeAdapter.stringTimeToSeconds(
+                    arrivalTime.getArrivalTime());
+            arrivalSeconds.add(seconds);
+        }
+        if(arrivalSeconds == null){
+            throw new IllegalStateException("arrivalSeconds was not filled.");
+        }
+        return arrivalSeconds;
     }
 
 
